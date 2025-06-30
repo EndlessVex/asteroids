@@ -57,7 +57,7 @@ class Player(CircleShape):
                 self.invuln = False
 
         if keys[pygame.K_w]:
-            # right
+            # forward
             self.move(dt)
         
         if keys[pygame.K_a]:
@@ -65,7 +65,7 @@ class Player(CircleShape):
             self.rotate(dt * -1)
 
         if keys[pygame.K_s]:
-            # right
+            # backwards
             self.move(dt * -1)
 
         if keys[pygame.K_d]:
