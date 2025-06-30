@@ -11,6 +11,9 @@ def main():
 
     # Game Loop
     while game_start == 1:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
         pygame.Surface.fill(screen, color="black")
         pygame.display.flip()
 
