@@ -8,10 +8,12 @@ class Player(CircleShape):
         self.rotation = 0
         self.shot_timer = 0.0
         self.respawn_timer = 0.0
+        self.blink_timer = 0.0
         self.points = 0
         self.lives = 3
         self.respawned = False
         self.invuln = False
+        self.blinking = False
     
     # triangle is from boot.dev
     def triangle(self):
@@ -23,9 +25,9 @@ class Player(CircleShape):
         return [a, b, c]
 
     def draw(self, screen):
-        if self.invuln == True:
+        if self.blinking == True:
             pygame.draw.polygon(screen, "red", self.triangle(), width=2)
-        if self.invuln == False:
+        if self.blinking == False:
             pygame.draw.polygon(screen, "white", self.triangle(), width=2)
 
     def rotate(self, dt):
@@ -45,6 +47,7 @@ class Player(CircleShape):
     def update(self, dt):
         keys = pygame.key.get_pressed()
         self.shot_timer -= dt
+        self.blink(dt)
 
         if self.respawned == True:
             self.respawn_timer += dt
@@ -81,3 +84,11 @@ class Player(CircleShape):
 
     def score(self, points):
         self.points += points
+
+    def blink(self, dt):
+        if self.invuln:
+            self.blink_timer += dt
+            if self.blink_timer > PLAYER_BLINK_TIME:
+                self.blink_timer = 0
+                self.blinking = not self.blinking
+        else: self.blinking = False
