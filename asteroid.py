@@ -3,6 +3,7 @@ import random
 from circleshape import *
 from constants import *
 from player import Player
+from explosion import Shard
 
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
@@ -14,6 +15,7 @@ class Asteroid(CircleShape):
     def split(self):
         self.kill()
         if self.radius <= ASTEROID_MIN_RADIUS:
+            self.explode()
             return
         angle = random.uniform(20, 50)
         pos_rand = self.velocity.rotate(angle)
@@ -26,3 +28,14 @@ class Asteroid(CircleShape):
 
     def update(self, dt):
         self.position += self.velocity * dt
+
+    def explode(self):
+        shard1_rand = self.velocity.rotate(random.uniform(0, 360))
+        shard2_rand = self.velocity.rotate(random.uniform(0, 360))
+        shard3_rand = self.velocity.rotate(random.uniform(0, 360))
+        shard1 = Shard(self.position.x, self.position.y)
+        shard2 = Shard(self.position.x, self.position.y)
+        shard3 = Shard(self.position.x, self.position.y)
+        shard1.velocity = shard1_rand *1.2
+        shard2.velocity = shard2_rand *1.2
+        shard3.velocity = shard3_rand *1.2

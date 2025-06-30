@@ -27,6 +27,7 @@ def main():
     Shot.containers = (shot_group, updatable_group, drawable_group)
 
     Asteroid.containers = (asteroid_group, updatable_group, drawable_group)
+    Shard.containers = (updatable_group, drawable_group)
     AsteroidField.containers = (updatable_group)
     asteroid_field = AsteroidField()
 
