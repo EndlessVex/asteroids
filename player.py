@@ -3,11 +3,15 @@ from constants import *
 from bullet import *
 
 class Player(CircleShape):
-    score = 0
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_timer = 0.0
+        self.respawn_timer = 0.0
+        self.points = 0
+        self.lives = 3
+        self.respawned = False
+        self.invuln = False
     
     # triangle is from boot.dev
     def triangle(self):
@@ -19,7 +23,10 @@ class Player(CircleShape):
         return [a, b, c]
 
     def draw(self, screen):
-        pygame.draw.polygon(screen, "white", self.triangle(), width=2)
+        if self.invuln == True:
+            pygame.draw.polygon(screen, "red", self.triangle(), width=2)
+        if self.invuln == False:
+            pygame.draw.polygon(screen, "white", self.triangle(), width=2)
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
@@ -38,6 +45,13 @@ class Player(CircleShape):
     def update(self, dt):
         keys = pygame.key.get_pressed()
         self.shot_timer -= dt
+
+        if self.respawned == True:
+            self.respawn_timer += dt
+            if self.respawn_timer > PLAYER_RESPAWN_TIME:
+                self.respawn_timer = 0
+                self.respawned = False
+                self.invuln = False
 
         if keys[pygame.K_w]:
             # right
@@ -58,3 +72,12 @@ class Player(CircleShape):
         if keys[pygame.K_SPACE]:
             # shoot
             self.shoot()
+
+    def respawn(self):
+        self.lives -= 1
+        self.invuln = True
+        self.respawned = True
+        self.position = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+
+    def score(self, points):
+        self.points += points

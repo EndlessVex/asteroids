@@ -37,7 +37,7 @@ def main():
             if event.type == pygame.QUIT:
                 return
         screen.fill(color="black")
-        text = font.render(f'{Player.score}', True, "green")
+        text = font.render(f'{player.points}', True, "green")
         textRect = text.get_rect()
         textRect.center = (SCREEN_WIDTH /2, textRect.height)
         screen.blit(text, textRect)
@@ -45,13 +45,16 @@ def main():
         for object in drawable_group:
             object.draw(screen)
         for asteroid in asteroid_group:
-            if asteroid.collide(player):
-                print("Game over!")
-                print(f"Score: {Player.score}")
-                sys.exit()
+            if asteroid.collide(player) and player.invuln == False:
+                player.respawn()
+                if player.lives == 0:
+                    print("Game over!")
+                    print(f"Score: {player.points}")
+                    sys.exit()
             for shot in shot_group:
                 if asteroid.collide(shot):
                     shot.kill()
+                    player.score(1)
                     asteroid.split()
                     
         pygame.display.flip()
