@@ -6,6 +6,12 @@ from asteroid import *
 from asteroidfield import *
 from bullet import *
 
+### TODO ###
+# Add weapon spawns
+# Make asteroids more lumpy
+# Make hitbox actually correct
+# Add Powerups
+
 def main():
     game_start = 1
     dt = 0
