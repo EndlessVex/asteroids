@@ -1,3 +1,4 @@
+import pygame
 from circleshape import *
 from constants import *
 from bullet import *
@@ -14,6 +15,8 @@ class Player(CircleShape):
         self.respawned = False
         self.invuln = False
         self.blinking = False
+        self.vel = pygame.Vector2(0, 0)
+        self.input = False
     
     # triangle is from boot.dev
     def triangle(self):
@@ -33,10 +36,24 @@ class Player(CircleShape):
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
 
-    def move(self, dt):
+    def accelerate(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        self.position += forward * PLAYER_SPEED * dt
+        self.vel += forward * PLAYER_ACCELERATION * dt
+        if self.vel.length() > PLAYER_SPEED:
+            self.vel.scale_to_length(PLAYER_SPEED)
 
+    def apply_friction(self, dt):
+        if self.vel.length() > 0:
+            friction_force = PLAYER_FRICTION * dt
+            if friction_force > self.vel.length():
+                self.vel = pygame.Vector2(0, 0)
+            else:
+                self.vel -= self.vel.normalize() * friction_force
+
+    def move(self, dt):
+        self.position += self.vel * dt
+        
+        
     def shoot(self):
         if self.shot_timer <= 0:
             self.shot_timer = PLAYER_SHOOT_CONSTANT
@@ -55,27 +72,36 @@ class Player(CircleShape):
                 self.respawn_timer = 0
                 self.respawned = False
                 self.invuln = False
+                self.vel = pygame.Vector2(0, 0)
 
         if keys[pygame.K_w]:
             # forward
-            self.move(dt)
-        
+            self.accelerate(dt)
+            self.input = True
+
         if keys[pygame.K_a]:
             # left
             self.rotate(dt * -1)
 
         if keys[pygame.K_s]:
             # backwards
-            self.move(dt * -1)
+            self.accelerate(dt * -0.5)
+            self.input = True
 
         if keys[pygame.K_d]:
             # right
-            self.rotate(dt)
+            self.rotate(dt, )
 
         if keys[pygame.K_SPACE]:
             # shoot
             if self.lives != 0:
                 self.shoot()
+
+        if not self.input:
+            self.apply_friction(dt)
+
+        self.move(dt)
+        self.input = False
 
     def respawn(self):
         self.lives -= 1
