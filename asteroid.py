@@ -30,12 +30,10 @@ class Asteroid(CircleShape):
         self.position += self.velocity * dt
 
     def explode(self):
-        shard1_rand = self.velocity.rotate(random.uniform(0, 360))
-        shard2_rand = self.velocity.rotate(random.uniform(0, 360))
-        shard3_rand = self.velocity.rotate(random.uniform(0, 360))
-        shard1 = Shard(self.position.x, self.position.y)
-        shard2 = Shard(self.position.x, self.position.y)
-        shard3 = Shard(self.position.x, self.position.y)
-        shard1.velocity = shard1_rand *1.2
-        shard2.velocity = shard2_rand *1.2
-        shard3.velocity = shard3_rand *1.2
+        self.shards(random.randint(3,5))
+
+    def shards(self, num_of_shards):
+        for shard in range(num_of_shards):
+            shard_rand = self.velocity.rotate(random.uniform(0, 360))
+            shard = Shard(self.position.x, self.position.y)
+            shard.velocity = shard_rand *1.2
