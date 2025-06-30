@@ -74,7 +74,8 @@ class Player(CircleShape):
 
         if keys[pygame.K_SPACE]:
             # shoot
-            self.shoot()
+            if self.lives != 0:
+                self.shoot()
 
     def respawn(self):
         self.lives -= 1
