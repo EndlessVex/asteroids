@@ -2,6 +2,7 @@ import pygame
 import random
 from circleshape import *
 from constants import *
+from player import Player
 
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
@@ -12,6 +13,7 @@ class Asteroid(CircleShape):
 
     def split(self):
         self.kill()
+        Player.score += 1
         if self.radius <= ASTEROID_MIN_RADIUS:
             return
         angle = random.uniform(20, 50)
