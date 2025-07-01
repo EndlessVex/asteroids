@@ -4,6 +4,7 @@ from circleshape import *
 from constants import *
 from player import Player
 from explosion import Shard
+from audio import *
 
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
@@ -13,6 +14,9 @@ class Asteroid(CircleShape):
         pygame.draw.circle(screen, "white", self.position, self.radius, width=2)
 
     def split(self):
+        asteroid_audio = pygame.mixer.find_channel()
+        if asteroid_audio is not None:
+            asteroid_audio.play(asteroid_explosion)
         self.kill()
         if self.radius <= ASTEROID_MIN_RADIUS:
             self.explode()

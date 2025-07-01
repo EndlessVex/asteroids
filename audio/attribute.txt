@@ -1,0 +1,3 @@
+shoot.wav: Pew pew sound effect - peww1 by ani_music -- https://freesound.org/s/219619/ -- License: Attribution 4.0
+asteroid_explosion.wav: Capgun Explosion.mp3 by CGEffex -- https://freesound.org/s/92630/ -- License: Attribution 4.0
+background.wav: Infinite Space by Beetlemuse -- https://freesound.org/s/564235/ -- License: Attribution 4.0

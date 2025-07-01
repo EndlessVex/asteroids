@@ -2,6 +2,7 @@ import pygame
 from circleshape import *
 from constants import *
 from bullet import *
+from audio import *
 
 class Player(CircleShape):
     def __init__(self, x, y):
@@ -57,6 +58,7 @@ class Player(CircleShape):
     def shoot(self):
         if self.shot_timer <= 0:
             self.shot_timer = PLAYER_SHOOT_CONSTANT
+            player_audio.play(shoot_sound)
             bullet = Shot(self.position.x, self.position.y, SHOT_RADIUS)
             forward = pygame.Vector2(0, 1).rotate(self.rotation)
             bullet.velocity = forward * PLAYER_SHOOT_SPEED

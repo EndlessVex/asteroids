@@ -5,12 +5,15 @@ from player import *
 from asteroid import *
 from asteroidfield import *
 from bullet import *
+from audio import *
 
 ### TODO ###
+# Add Audio
 # Add weapon spawns
 # Make asteroids more lumpy
 # Make hitbox actually correct
 # Add Powerups
+
 
 def main():
     game_start = 1
@@ -37,7 +40,7 @@ def main():
     AsteroidField.containers = (updatable_group)
     asteroid_field = AsteroidField()
 
-
+    world_audio.play(background_music, loops=-1)
     # Game Loop
     while game_start == 1:
         for event in pygame.event.get():
@@ -53,6 +56,7 @@ def main():
             object.draw(screen)
         for asteroid in asteroid_group:
             if asteroid.collide(player) and player.invuln == False:
+                death_audio.play(death_explosion)
                 player.respawn()
                 if player.lives == 0:
                     print("Game over!")
