@@ -8,11 +8,10 @@ from bullet import *
 from audio import *
 
 ### TODO ###
-# Add Audio
-# Add weapon spawns
-# Make asteroids more lumpy
-# Make hitbox actually correct
-# Add Powerups
+# Add weapon spawns with effects when grabbed along with audio
+# Make asteroids more lumpy and varried
+# Make hitbox actually correct (a triangle)
+# Add Powerups (speed, shield, clear screen)
 
 
 def main():
