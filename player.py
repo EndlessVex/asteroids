@@ -173,3 +173,11 @@ class Player(CircleShape):
                 self.blink_timer = 0
                 self.blinking = not self.blinking
         else: self.blinking = False
+
+    def collide(self, other):
+        player_body = self.triangle()
+        center = self.position
+        for point in player_body:
+            if other.position.distance_to((point - center) * 0.1 + center) <= other.radius:
+                return True
+        return False
