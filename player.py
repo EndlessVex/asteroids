@@ -18,6 +18,14 @@ class Player(CircleShape):
         self.blinking = False
         self.vel = pygame.Vector2(0, 0)
         self.input = False
+        self.triple_shot = False
+        self.triple_timer = 0.0
+        self.shield = False
+        self.shield_timer = 0.0
+        self.speedup = False
+        self.speedup_timer = 0.0
+        self.buffer = False
+        self.buffer_timer = 0.0
     
     # triangle is from boot.dev
     def triangle(self):
@@ -33,6 +41,8 @@ class Player(CircleShape):
             pygame.draw.polygon(screen, "red", self.triangle(), width=2)
         if self.blinking == False:
             pygame.draw.polygon(screen, "white", self.triangle(), width=2)
+        if self.shield == True:
+            pygame.draw.circle(screen, "blue", self.position, self.radius + 5, width=2)
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
@@ -52,7 +62,10 @@ class Player(CircleShape):
                 self.vel -= self.vel.normalize() * friction_force
 
     def move(self, dt):
-        self.position += self.vel * dt
+        if self.speedup == True:
+            self.position += self.vel * dt * POWERUP_SPEED_BOOST
+        else:
+            self.position += self.vel * dt
         
         
     def shoot(self):
@@ -62,11 +75,50 @@ class Player(CircleShape):
             bullet = Shot(self.position.x, self.position.y, SHOT_RADIUS)
             forward = pygame.Vector2(0, 1).rotate(self.rotation)
             bullet.velocity = forward * PLAYER_SHOOT_SPEED
+            if self.triple_shot == True:
+                left_bullet = Shot(self.position.x, self.position.y, SHOT_RADIUS)
+                right_bullet = Shot(self.position.x, self.position.y, SHOT_RADIUS)
+                forward_left = pygame.Vector2(0, 1).rotate(self.rotation - 15)
+                forward_right = pygame.Vector2(0, 1).rotate(self.rotation + 15)
+                left_bullet.velocity = forward_left * PLAYER_SHOOT_SPEED
+                right_bullet.velocity = forward_right * PLAYER_SHOOT_SPEED
+
+    def powerup_check(self, dt):
+        if self.shield == True:
+            self.shield_timer += dt
+            if self.shield_timer >= POWERUP_LENGTH:
+                self.shield = False
+                self.shielded()
+
+        if self.triple_shot == True:
+            self.triple_timer += dt
+            if self.triple_timer >= POWERUP_LENGTH:
+                self.triple_shot = False
+
+        if self.speedup == True:
+            self.speedup_timer += dt
+            if self.speedup_timer >= POWERUP_LENGTH:
+                self.speedup = False
+
+    def shielded(self):
+        self.buffer = True
+        self.invuln = True
+        self.shield = False
+        print("player used shield")
+        # insert sound here
+        # insert particle effect ?
 
     def update(self, dt):
         keys = pygame.key.get_pressed()
         self.shot_timer -= dt
         self.blink(dt)
+        self.powerup_check(dt)
+
+        if self.buffer == True:
+            self.buffer_timer += dt
+            if self.buffer_timer >= SHIELD_BUFFER:
+                self.buffer = False
+                self.invuln = False
 
         if self.respawned == True:
             self.respawn_timer += dt

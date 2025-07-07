@@ -6,6 +6,7 @@ from asteroid import *
 from asteroidfield import *
 from bullet import *
 from audio import *
+from powerups import *
 
 ### TODO ###
 # Add weapon spawns with effects when grabbed along with audio
@@ -58,7 +59,10 @@ def main():
         for asteroid in asteroid_group:
             if asteroid.collide(player) and player.invuln == False:
                 death_audio.play(death_explosion)
-                player.respawn()
+                if player.shield != True:
+                    player.respawn()
+                else:
+                    player.shielded()
                 if player.lives == 0:
                     print("Game over!")
                     print(f"Score: {player.points}")
@@ -68,6 +72,10 @@ def main():
                     shot.kill()
                     player.score(1)
                     asteroid.split()
+        for powerup in powerup_group:
+            if powerup.collide(player):
+                powerup.powerup_player(player)
+                powerup.kill()
                     
         pygame.display.flip()
         dt = game_clock.tick(60) / 1000
