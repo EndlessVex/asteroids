@@ -29,6 +29,7 @@ def main():
     drawable_group = pygame.sprite.Group()
     asteroid_group = pygame.sprite.Group()
     shot_group = pygame.sprite.Group()
+    powerup_group = pygame.sprite.Group()
 
     Player.containers = (updatable_group, drawable_group)
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
@@ -37,6 +38,7 @@ def main():
     Asteroid.containers = (asteroid_group, updatable_group, drawable_group)
     Shard.containers = (updatable_group, drawable_group)
     AsteroidField.containers = (updatable_group)
+    Powerup.containers = (powerup_group, updatable_group, drawable_group)
     asteroid_field = AsteroidField()
 
     world_audio.play(background_music, loops=-1)

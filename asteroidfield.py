@@ -39,7 +39,8 @@ class AsteroidField(pygame.sprite.Sprite):
         asteroid.velocity = velocity
 
     def spawn_powerup(self, position_x, position_y, type):
-        powerup = Powerup(self, position_x, position_y, type) # need to define this class in powerups.py we will want the type to read number
+        powerup = Powerup(position_x, position_y, type)
+        print(f"spawned powerup at: {powerup.position} it is {powerup.color}")
 
     def update(self, dt):
         self.spawn_timer += dt
